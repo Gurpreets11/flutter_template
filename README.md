@@ -1,99 +1,61 @@
-# flutter_template
+# flutter_starter
 
-## core_package
+A GitHub template repo for bootstrapping new Flutter apps: splash → login →
+home → profile → change-password, fully wired to
+[`core_package`](https://github.com/your-org/core-package) (theming,
+networking, validators, common widgets, `Result`/`UseCase` base classes).
 
-A reusable Flutter foundation for building Clean Architecture apps quickly:
-networking, error handling, logging, validation, a configurable theming
-contract, and base architecture classes — with zero business logic baked in,
-so it's safe to reuse across any number of apps.
+## What's here
 
-This package is deliberately unopinionated about *what* your app does — it
-only standardizes *how* the plumbing works, so every app built on it shares
-the same network layer, error handling, and design-token-driven theming.
+- `lib/app/` — `main.dart`, `StarterApp` (theme + router wiring), `router.dart`
+  (GoRouter with auth-driven redirects)
+- `lib/theme/starter_theme.dart` — **the one file you change to re-brand a
+  new app** — nothing else hardcodes a color
+- `lib/shell/app_shell.dart` — common app bar + navigation drawer wrapping
+  every authenticated screen
+- `lib/features/auth/` — full Clean Architecture slice (domain / data /
+  presentation) for login, logout, change password, and session persistence.
+  **`AuthRepositoryImpl` is a demo/mock** — it doesn't call a real backend
+  (any well-formed email + 8-character password "succeeds"). Swap in a real
+  implementation using `ApiClient` from `core_package` once your app has an
+  actual API; nothing in the domain or presentation layers needs to change.
+- `lib/features/home/`, `lib/features/profile/` — starter screens to replace
+  with your app's real dashboard/profile content
 
-## Status
+## Using this template for a new app
 
-🚧 Early development (`0.1.0`) — API may still change before a `1.0.0`
-release. Currently distributed via GitHub; will move to
-[pub.dev](https://pub.dev) once the API is stable.
+1. On GitHub: **"Use this template"** → create your new repo (e.g. `sales-crm-app`)
+2. Rename the package: `pubspec.yaml`'s `name:`, any
+   `import 'package:flutter_starter/...'` → your new package name,
+   `applicationId` (Android), bundle identifier (iOS), and the app's display
+   name
+3. In `pubspec.yaml`, pin `core_package`'s `ref:` to a specific tagged
+   version (not `main`)
+4. Replace `lib/theme/starter_theme.dart`'s colors with your app's real brand
+   palette
+5. Replace `AuthRepositoryImpl` with a real, API-backed implementation once
+   you have a backend
+6. Build your app's actual feature modules under `lib/features/`
 
-## Install
+## Running it
 
-```yaml
-dependencies:
-  core_package:
-    git:
-      url: https://github.com/your-org/core-package.git
-      ref: main
+```bash
+flutter pub get
+flutter run
 ```
 
-## What's included (Phase 1)
+The demo login accepts any well-formed email with a password of 8+
+characters — there's no real backend behind it yet.
 
-- **Networking** — `ApiClient`, a Dio wrapper returning a `Result<T>` so
-  callers never need try/catch; `AuthInterceptor` and `LoggingInterceptor`.
-- **Errors** — an `AppException` hierarchy (data layer) mapped via
-  `ExceptionMapper` to a `Failure` hierarchy (domain/presentation layer).
-- **Logging** — `AppLogger`, silent in release builds.
-- **Validation** — composable `Validators` (email, phone, password,
-  required, min/max length, matches).
-- **Theming** — `AppThemeConfig`, a design-token contract consumed by
-  shared widgets (added in Phase 2) so each app can be branded differently
-  without touching this package's code. `AppThemeScope` exposes it via
-  `InheritedWidget`.
-- **Base classes** — `UseCase<Type, Params>` and a `Repository` marker
-  interface for Clean Architecture layering.
+## Testing
 
-## Quick start
-
-```dart
-import 'package:core_package/core_package.dart';
-import 'package:dio/dio.dart';
-
-// 1. Configure Dio for this app's environment.
-final dio = Dio(BaseOptions(baseUrl: 'https://api.example.com'))
-  ..interceptors.addAll([
-    AuthInterceptor(
-      getToken: () async => tokenStorage.readToken(),
-      onUnauthorized: () async => authController.logout(),
-    ),
-    LoggingInterceptor(),
-  ]);
-
-final apiClient = ApiClient(dio);
-
-// 2. Wrap the app root with this app's brand theme.
-void main() {
-  final themeConfig = AppThemeConfig(
-    primary: const Color(0xFF1A237E),
-    secondary: const Color(0xFF00897B),
-    background: const Color(0xFFF5F5F5),
-    surface: Colors.white,
-    error: const Color(0xFFD32F2F),
-  );
-
-  runApp(
-    AppThemeScope(
-      config: themeConfig,
-      child: MaterialApp(
-        theme: themeConfig.toThemeData(),
-        home: const HomeScreen(),
-      ),
-    ),
-  );
-}
+```bash
+flutter test
 ```
 
-## Roadmap
-
-See the project's architecture guide for the full phased plan (common
-widgets, storage, connectivity, and the companion starter template repo).
-
-## Contributing
-
-Issues and PRs welcome — see `CONTRIBUTING.md` (coming soon).
-
-## License
-
-MIT — see `LICENSE`.
-
- 
+`AuthController` is covered with a mocked `AuthRepository` (login
+success/failure, logout, change-password success/failure). Widget-level
+tests for the full app flow aren't included yet, since `AuthLocalDataSource`
+talks to `flutter_secure_storage`'s platform channel, which needs mocking to
+run reliably in a widget-test environment — worth adding once this app has
+real screens built on top of the starter.
