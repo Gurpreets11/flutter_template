@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../theme/starter_theme.dart';
+import 'app_providers.dart';
 import 'router.dart';
 
 /// The app's root widget. Wraps [MaterialApp.router] with
 /// [AppThemeScope] so every shared widget in `core_package` can read
-/// [starterThemeConfig] via `AppThemeScope.of(context)`.
+/// [starterThemeConfig] via `AppThemeScope.of(context)`, and wraps the
+/// routed content with [AppConnectivityBanner] so every screen shows a
+/// consistent offline indicator.
 class StarterApp extends ConsumerWidget {
   /// Creates a [StarterApp].
   const StarterApp({super.key});
@@ -15,6 +18,7 @@ class StarterApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+    final connectivityService = ref.watch(connectivityServiceProvider);
 
     return AppThemeScope(
       config: starterThemeConfig,
@@ -25,6 +29,10 @@ class StarterApp extends ConsumerWidget {
         darkTheme: starterThemeConfig.toThemeData(brightness: Brightness.dark),
         themeMode: ThemeMode.system,
         routerConfig: router,
+        builder: (context, child) => AppConnectivityBanner(
+          connectivityService: connectivityService,
+          child: child ?? const SizedBox.shrink(),
+        ),
       ),
     );
   }

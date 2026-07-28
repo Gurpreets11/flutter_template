@@ -1,3 +1,4 @@
+import 'package:core_package/core_package.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/datasources/auth_local_data_source.dart';
@@ -9,9 +10,14 @@ import '../../domain/usecases/logout_use_case.dart';
 import 'auth_controller.dart';
 import 'auth_state.dart';
 
+/// The secure storage service backing session persistence.
+final secureStorageServiceProvider = Provider<SecureStorageService>((ref) {
+  return SecureStorageServiceImpl();
+});
+
 /// The local data source persisting the session.
 final authLocalDataSourceProvider = Provider<AuthLocalDataSource>((ref) {
-  return AuthLocalDataSource();
+  return AuthLocalDataSource(storage: ref.watch(secureStorageServiceProvider));
 });
 
 /// The auth repository. Swap [AuthRepositoryImpl] for a real,

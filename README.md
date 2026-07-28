@@ -54,8 +54,10 @@ flutter test
 ```
 
 `AuthController` is covered with a mocked `AuthRepository` (login
-success/failure, logout, change-password success/failure). Widget-level
-tests for the full app flow aren't included yet, since `AuthLocalDataSource`
-talks to `flutter_secure_storage`'s platform channel, which needs mocking to
-run reliably in a widget-test environment — worth adding once this app has
-real screens built on top of the starter.
+success/failure, logout, change-password success/failure).
+`AuthLocalDataSource` is covered with a fake in-memory
+`SecureStorageService` (no platform channel involved, since it depends on
+`core_package`'s storage abstraction rather than `flutter_secure_storage`
+directly). Full app-level widget tests (tapping through splash → login →
+home) aren't included yet — worth adding once this app has real screens
+built on top of the starter.
