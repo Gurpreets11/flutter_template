@@ -77,11 +77,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.3.0"
-      resolved-ref: "33557f31c9cdaf45364eae25b955589e600921a5"
+      ref: "v0.4.0"
+      resolved-ref: b300c02d0ee83c176564805951590c53b60c9880
       url: "https://github.com/Gurpreets11/core_package.git"
     source: git
-    version: "0.1.0"
+    version: "0.4.0"
   crypto:
     dependency: transitive
     description:
@@ -241,6 +241,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.2"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.19.0"
   jni:
     dependency: transitive
     description:

@@ -39,9 +39,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
             );
 
     if (success && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password updated.')),
-      );
+      AppSnackbar.showSuccess(context, 'Password updated.');
       Navigator.of(context).pop();
     }
   }
@@ -54,9 +52,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
     ref.listen(authControllerProvider, (previous, next) {
       if (next.errorMessage != null &&
           next.errorMessage != previous?.errorMessage) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(next.errorMessage!)),
-        );
+        AppSnackbar.showError(context, next.errorMessage!);
       }
     });
 

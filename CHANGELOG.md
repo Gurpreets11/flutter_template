@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0
+
+- **Home screen**: now a real, working demo combining `AppSearchField` and `AppPaginatedListView` (from `core_package` `v0.4.0`) against an in-memory dataset — pull-to-refresh-free infinite scroll, debounced search, empty state on no matches. Replace `_allItems`/`_loadMore` with a real repository call in an app built from this template.
+- **Navigation**: `AppShell` now uses `AppBottomNavBar` for primary Home/Profile switching; the drawer is scoped to secondary actions (Change password, Log out) — a common hybrid pattern.
+- **Feedback**: login and change-password screens now use `AppSnackbar` (success/error) instead of raw `ScaffoldMessenger` calls.
+- Bumped `core_package` dependency to `v0.4.0`.
+
 ## 0.2.0
 
 - **Refactor**: `AuthLocalDataSource` now depends on `core_package`'s `SecureStorageService` instead of `flutter_secure_storage` directly — closes a testing gap, since it can now be tested with a fake in-memory storage instead of needing a mocked platform channel.
