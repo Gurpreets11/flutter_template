@@ -100,6 +100,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   SizedBox(height: config.spacing.lg),
                   AppButton(
                     label: 'Sign in',
+                    variant: AppButtonVariant.gradient,
                     isLoading: authState.isLoading,
                     onPressed: _submit,
                   ),

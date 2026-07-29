@@ -6,11 +6,13 @@ import '../../../auth/presentation/providers/auth_providers.dart';
 
 /// The home screen — the first screen shown after login.
 ///
-/// Demonstrates [AppSearchField] and [AppPaginatedListView] wired
-/// together against a small in-memory dataset, standing in for a real
-/// paginated API-backed list (e.g. leads, orders). New apps built from
-/// this template replace `_allItems` and the artificial delay in
-/// [_loadMore] with a real repository call.
+/// Demonstrates [AppSearchField], [AppDropdownTrigger] (paired with
+/// [AppDialogs.showActionSheet] for a "Sort by" control), and
+/// [AppPaginatedListView] wired together against a small in-memory
+/// dataset, standing in for a real paginated API-backed list (e.g.
+/// leads, orders). New apps built from this template replace
+/// `_allItems` and the artificial delay in [_loadMore] with a real
+/// repository call.
 class HomeScreen extends ConsumerStatefulWidget {
   /// Creates a [HomeScreen].
   const HomeScreen({super.key});
@@ -29,6 +31,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   late final PaginationController _paginationController;
   String _query = '';
   int _visibleCount = _pageSize;
+  bool _sortNewestFirst = true;
 
   @override
   void initState() {
@@ -43,11 +46,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   List<String> get _filteredItems {
-    if (_query.isBlank) return _allItems;
-    final lowerQuery = _query.toLowerCase();
-    return _allItems.where((item) {
-      return item.toLowerCase().contains(lowerQuery);
-    }).toList();
+    final matches = _query.isBlank
+        ? _allItems
+        : _allItems.where((item) {
+            return item.toLowerCase().contains(_query.toLowerCase());
+          }).toList();
+
+    // "Newest" here just means the generated order vs. reversed — in a
+    // real app this would be a `sortBy` parameter on the repository call.
+    return _sortNewestFirst ? matches : matches.reversed.toList();
+  }
+
+  Future<void> _showSortSheet(BuildContext context) async {
+    final selection = await AppDialogs.showActionSheet<bool>(
+      context,
+      title: 'Sort by',
+      items: [
+        AppActionSheetItem(label: 'Newest first', value: true),
+        AppActionSheetItem(label: 'Oldest first', value: false),
+      ],
+    );
+
+    if (selection != null && selection != _sortNewestFirst) {
+      setState(() {
+        _sortNewestFirst = selection;
+        _visibleCount = _pageSize;
+      });
+      _paginationController.reset();
+    }
   }
 
   Future<void> _loadMore() async {
@@ -89,9 +115,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           SizedBox(height: config.spacing.md),
-          AppSearchField(
-            hintText: 'Search activity',
-            onChanged: _onSearchChanged,
+          Row(
+            children: [
+              Expanded(
+                child: AppSearchField(
+                  hintText: 'Search activity',
+                  onChanged: _onSearchChanged,
+                ),
+              ),
+              SizedBox(width: config.spacing.sm),
+              AppDropdownTrigger(
+                label: _sortNewestFirst ? 'Newest' : 'Oldest',
+                onTap: () => _showSortSheet(context),
+              ),
+            ],
           ),
           SizedBox(height: config.spacing.md),
           Expanded(

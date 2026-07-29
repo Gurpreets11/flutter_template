@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+- **Login screen**: primary "Sign in" CTA now uses `AppButton`'s gradient variant (from `core_package` `v0.5.0`) as a working example.
+- **Home screen**: added a "Sort by" control using `AppDropdownTrigger` paired with `AppDialogs.showActionSheet`, sorting the demo activity list newest/oldest-first.
+- Bumped `core_package` dependency to `v0.5.0`.
+
 ## 0.3.0
 
 - **Home screen**: now a real, working demo combining `AppSearchField` and `AppPaginatedListView` (from `core_package` `v0.4.0`) against an in-memory dataset — pull-to-refresh-free infinite scroll, debounced search, empty state on no matches. Replace `_allItems`/`_loadMore` with a real repository call in an app built from this template.
