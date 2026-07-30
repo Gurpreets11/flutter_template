@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0 (in progress)
+
+- **New**: `ThemeModeController` (`lib/features/settings/`) — persists the user's light/dark/system choice via `core_package`'s `AppPreferencesService`. Wired into `StarterApp`'s `themeMode`.
+- **Profile screen**: added a temporary "Appearance" `SegmentedButton` control (System/Light/Dark) — this belongs on a dedicated Settings screen once one exists; it's here for now just to exercise `ThemeModeController` visibly.
+- `pubspec.yaml` temporarily points `core_package` at `ref: main` (not a tag) — switch back to a tagged version once `core-package`'s in-progress batch is tagged.
+- More additions planned for this version (overflow menu wiring, the real Settings screen, responsive theming, feature flags).
+
 ## 0.4.0
 
 - **Login screen**: primary "Sign in" CTA now uses `AppButton`'s gradient variant (from `core_package` `v0.5.0`) as a working example.

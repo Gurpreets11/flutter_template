@@ -2,6 +2,7 @@ import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../features/settings/presentation/provider/theme_mode_controller.dart';
 import '../theme/starter_theme.dart';
 import 'app_providers.dart';
 import 'router.dart';
@@ -19,6 +20,7 @@ class StarterApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     final connectivityService = ref.watch(connectivityServiceProvider);
+    final themeMode = ref.watch(themeModeControllerProvider);
 
     return AppThemeScope(
       config: starterThemeConfig,
@@ -27,7 +29,7 @@ class StarterApp extends ConsumerWidget {
         debugShowCheckedModeBanner: false,
         theme: starterThemeConfig.toThemeData(),
         darkTheme: starterThemeConfig.toThemeData(brightness: Brightness.dark),
-        themeMode: ThemeMode.system,
+        themeMode: themeMode,
         routerConfig: router,
         builder: (context, child) => AppConnectivityBanner(
           connectivityService: connectivityService,

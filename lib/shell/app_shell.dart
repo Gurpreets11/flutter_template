@@ -37,7 +37,7 @@ class AppShell extends ConsumerWidget {
     final currentTabIndex = _tabRoutes.indexOf(location).clamp(0, 1);
 
     return Scaffold(
-      appBar: AppCommonBar(title: title, showBackButton: false),
+      appBar: AppCommonBar(title: title),
       drawer: AppNavigationDrawer(
         header: UserAccountsDrawerHeader(
           accountName: Text(authState.user?.name ?? ''),
