@@ -5,12 +5,13 @@ import 'package:go_router/go_router.dart';
 
 import '../features/auth/presentation/providers/auth_providers.dart';
 
-/// Wraps every authenticated screen with a consistent [AppCommonBar],
-/// [AppBottomNavBar] (primary Home/Profile switching), and
-/// [AppNavigationDrawer] (secondary actions — change password, log
-/// out). This split mirrors how most real apps combine navigation
-/// patterns: tabs for the few most-used destinations, a drawer for
-/// everything else.
+/// Wraps every authenticated screen with a consistent [AppCommonBar]
+/// (title, 3-dot overflow menu), [AppBottomNavBar] (primary Home/
+/// Profile switching), and [AppNavigationDrawer] (hamburger-triggered,
+/// for the same Settings/Log out actions as the overflow menu — some
+/// users reach for the drawer, others for the overflow menu, so both
+/// are wired to the same actions rather than splitting functionality
+/// across them).
 ///
 /// ```dart
 /// ShellRoute(
@@ -36,8 +37,36 @@ class AppShell extends ConsumerWidget {
     final location = GoRouterState.of(context).matchedLocation;
     final currentTabIndex = _tabRoutes.indexOf(location).clamp(0, 1);
 
+    Future<void> handleLogout() async {
+      final confirmed = await AppDialogs.showConfirm(
+        context,
+        title: 'Log out?',
+        message: 'You\'ll need to sign in again to continue.',
+        confirmLabel: 'Log out',
+        isDestructive: true,
+      );
+      if (confirmed) {
+        await ref.read(authControllerProvider.notifier).logout();
+      }
+    }
+
     return Scaffold(
-      appBar: AppCommonBar(title: title),
+      appBar: AppCommonBar(
+        title: title,
+        overflowMenuItems: [
+          AppOverflowMenuItem(
+            label: 'Settings',
+            icon: Icons.settings_outlined,
+            onTap: () => context.push('/settings'),
+          ),
+          AppOverflowMenuItem(
+            label: 'Log out',
+            icon: Icons.logout,
+            isDestructive: true,
+            onTap: handleLogout,
+          ),
+        ],
+      ),
       drawer: AppNavigationDrawer(
         header: UserAccountsDrawerHeader(
           accountName: Text(authState.user?.name ?? ''),
@@ -45,11 +74,11 @@ class AppShell extends ConsumerWidget {
         ),
         items: [
           AppDrawerItem(
-            label: 'Change password',
-            icon: Icons.lock_reset_outlined,
+            label: 'Settings',
+            icon: Icons.settings_outlined,
             onTap: () {
               Navigator.of(context).pop();
-              context.push('/change-password');
+              context.push('/settings');
             },
           ),
         ],
@@ -57,18 +86,9 @@ class AppShell extends ConsumerWidget {
           AppDrawerItem(
             label: 'Log out',
             icon: Icons.logout,
-            onTap: () async {
+            onTap: () {
               Navigator.of(context).pop();
-              final confirmed = await AppDialogs.showConfirm(
-                context,
-                title: 'Log out?',
-                message: 'You\'ll need to sign in again to continue.',
-                confirmLabel: 'Log out',
-                isDestructive: true,
-              );
-              if (confirmed) {
-                await ref.read(authControllerProvider.notifier).logout();
-              }
+              handleLogout();
             },
           ),
         ],

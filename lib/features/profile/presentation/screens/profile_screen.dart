@@ -4,17 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../auth/presentation/providers/auth_providers.dart';
-import '../../../settings/presentation/provider/theme_mode_controller.dart';
 
 /// The profile screen — shows the current user's details with actions
 /// to change their password or log out. New apps built from this
 /// template extend this with real profile fields (avatar upload,
 /// organization, role, etc.) as the backend supports them.
-///
-/// Also hosts a temporary "Appearance" (theme mode) control — this
-/// belongs on a dedicated Settings screen once one exists; it lives
-/// here for now just so [ThemeModeController] has a visible, working
-/// place to be exercised.
 class ProfileScreen extends ConsumerWidget {
   /// Creates a [ProfileScreen].
   const ProfileScreen({super.key});
@@ -23,7 +17,6 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final config = AppThemeScope.of(context);
     final authState = ref.watch(authControllerProvider);
-    final themeMode = ref.watch(themeModeControllerProvider);
     final user = authState.user;
 
     if (user == null) {
@@ -69,44 +62,6 @@ class ProfileScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: config.spacing.md),
-          AppCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Appearance',
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                SizedBox(height: config.spacing.sm),
-                SegmentedButton<ThemeMode>(
-                  segments: const [
-                    ButtonSegment(
-                      value: ThemeMode.system,
-                      label: Text('System'),
-                      icon: Icon(Icons.brightness_auto_outlined),
-                    ),
-                    ButtonSegment(
-                      value: ThemeMode.light,
-                      label: Text('Light'),
-                      icon: Icon(Icons.light_mode_outlined),
-                    ),
-                    ButtonSegment(
-                      value: ThemeMode.dark,
-                      label: Text('Dark'),
-                      icon: Icon(Icons.dark_mode_outlined),
-                    ),
-                  ],
-                  selected: {themeMode},
-                  onSelectionChanged: (selection) {
-                    ref
-                        .read(themeModeControllerProvider.notifier)
-                        .setThemeMode(selection.first);
-                  },
                 ),
               ],
             ),

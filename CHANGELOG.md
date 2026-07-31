@@ -2,10 +2,14 @@
 
 ## 0.5.0 (in progress)
 
-- **New**: `ThemeModeController` (`lib/features/settings/`) — persists the user's light/dark/system choice via `core_package`'s `AppPreferencesService`. Wired into `StarterApp`'s `themeMode`.
-- **Profile screen**: added a temporary "Appearance" `SegmentedButton` control (System/Light/Dark) — this belongs on a dedicated Settings screen once one exists; it's here for now just to exercise `ThemeModeController` visibly.
+- **New**: `ThemeModeController` — persists the user's light/dark/system choice via `core_package`'s `AppPreferencesService`. Wired into `StarterApp`'s `themeMode`.
+- **New**: `FontScaleController` + `AppFontScale` (Small/Medium/Large curated enum, not a free-form slider) — persists the user's text-size choice, applied app-wide via a `MediaQuery` override in `StarterApp`.
+- **New**: `NotificationSettingsController` — persists the notifications-enabled preference. Deliberately tracks the *preference* only; actually registering for push notifications with a provider (FCM, etc.) is out of scope here, same honest-scope pattern as `AuthRepositoryImpl`.
+- **New**: `lib/constants/` — `AppConstants` (app name, support email, policy URLs, min password length, default page size) and `ApiConstants` (base URL, timeouts, endpoint paths — placeholders until real API integration).
+- **New**: the real **Settings screen** (`/settings`) — Account (view profile, change password), Appearance (theme mode + font size), Notifications toggle, Support (contact us, about us with app version via `package_info_plus`), and Log out. This is now the single home for all of the above; the Profile screen no longer carries a temporary Appearance control.
+- **`AppShell`**: `AppCommonBar`'s overflow menu (3-dot) and the navigation drawer are now both wired to the same two actions — Settings and Log out — rather than splitting functionality across them; the drawer's old separate "Change password" item was folded into Settings.
 - `pubspec.yaml` temporarily points `core_package` at `ref: main` (not a tag) — switch back to a tagged version once `core-package`'s in-progress batch is tagged.
-- More additions planned for this version (overflow menu wiring, the real Settings screen, responsive theming, feature flags).
+- Still to come for this version: component-level theme customization (card/field tokens) and responsive sizing utilities.
 
 ## 0.4.0
 

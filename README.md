@@ -21,6 +21,13 @@ networking, validators, common widgets, `Result`/`UseCase` base classes).
   actual API; nothing in the domain or presentation layers needs to change.
 - `lib/features/home/`, `lib/features/profile/` — starter screens to replace
   with your app's real dashboard/profile content
+- `lib/features/settings/` — the Settings screen (`/settings`): profile
+  link, change password, theme mode, font size, notifications toggle,
+  contact/about us, and log out. Reached via `AppCommonBar`'s overflow
+  menu or the navigation drawer — both point at the same actions.
+- `lib/constants/` — `AppConstants` (app name, support email, policy URLs)
+  and `ApiConstants` (base URL, timeouts, endpoint paths — placeholders
+  until real API integration)
 
 ## Using this template for a new app
 
