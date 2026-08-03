@@ -77,8 +77,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: main
-      resolved-ref: "99b49b13941efb2a183647fa2dfaf3a21ac7dca8"
+      ref: "v0.6.0"
+      resolved-ref: "5b5b9b0fd5826acc463cf955a53964ba7bc32661"
       url: "https://github.com/Gurpreets11/core_package.git"
     source: git
     version: "0.6.0"
