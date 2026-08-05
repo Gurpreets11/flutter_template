@@ -7,8 +7,10 @@ networking, validators, common widgets, `Result`/`UseCase` base classes).
 
 ## What's here
 
-- `lib/app/` — `main.dart`, `StarterApp` (theme + router wiring), `router.dart`
-  (GoRouter with auth-driven redirects)
+- `lib/app/` — `main.dart`, `StarterApp` (theme + router wiring, plus
+  `UpdateRequiredGate`/`BiometricLockGate`/`AppIdleTimeoutGuard` — each
+  toggled via `featureFlagsProvider`), `router.dart` (GoRouter with
+  auth-driven redirects)
 - `lib/theme/starter_theme.dart` — **the one file you change to re-brand a
   new app** — nothing else hardcodes a color
 - `lib/shell/app_shell.dart` — common app bar + navigation drawer wrapping
@@ -28,6 +30,10 @@ networking, validators, common widgets, `Result`/`UseCase` base classes).
 - `lib/constants/` — `AppConstants` (app name, support email, policy URLs)
   and `ApiConstants` (base URL, timeouts, endpoint paths — placeholders
   until real API integration)
+- `lib/features/settings/data/demo_update_check_service.dart` — **also a
+  demo/stub**, same pattern as `AuthRepositoryImpl`: always reports the
+  app is up to date. Replace once a real backend/remote-config source
+  exists.
 
 ## Using this template for a new app
 

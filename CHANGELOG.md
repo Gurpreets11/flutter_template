@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.0
+
+- **New**: `featureFlagsProvider` (`lib/app/app_providers.dart`) — this app's `AppFeatureFlags` instance. Idle timeout and force-update check are on by default (to demo the wiring); biometric lock is off by default (needs biometrics enrolled on the test device to demo cleanly).
+- **New**: `AppIdleTimeoutGuard` wired into `StarterApp` — logs out after 15 minutes of no interaction when `enableIdleTimeout` is on.
+- **New**: `BiometricLockGate` (`lib/app/`) — shows a lock screen on app resume from background when `enableBiometricLock` is on, using `core_package`'s `BiometricLockService`.
+- **New**: `UpdateRequiredGate` (`lib/app/`) + `DemoUpdateCheckServiceImpl` (`lib/features/settings/data/`) — checks for a required update on launch when `enableForceUpdateCheck` is on. The demo implementation always reports "up to date"; replace it once a real backend/remote-config source exists.
+- Bumped `core_package` dependency to `v0.7.0`.
+
 ## 0.5.0
 
 - **New**: `ThemeModeController` — persists the user's light/dark/system choice via `core_package`'s `AppPreferencesService`. Wired into `StarterApp`'s `themeMode`.
