@@ -1,8 +1,7 @@
 import 'package:core_package/core_package.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/theme_mode_controller.dart'
-    show appPreferencesServiceProvider;
+import 'theme_mode_controller.dart' show appPreferencesServiceProvider;
 
 /// Manages whether push notifications are enabled, persisting the
 /// choice via [AppPreferencesService].

@@ -2,9 +2,9 @@ import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/auth_providers.dart';
+import '../providers/auth_provider.dart';
 
-/// The login screen — email/password form wired to [authControllerProvider].
+/// The login screen — email/password form wired to [authProvider].
 /// Router redirect handles navigating to `/home` once login succeeds.
 class LoginScreen extends ConsumerStatefulWidget {
   /// Creates a [LoginScreen].
@@ -29,7 +29,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
-    await ref.read(authControllerProvider.notifier).login(
+    await ref.read(authProvider.notifier).login(
           _emailController.text.trim(),
           _passwordController.text,
         );
@@ -38,9 +38,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final config = AppThemeScope.of(context);
-    final authState = ref.watch(authControllerProvider);
+    final authState = ref.watch(authProvider);
 
-    ref.listen(authControllerProvider, (previous, next) {
+    ref.listen(authProvider, (previous, next) {
       if (next.errorMessage != null &&
           next.errorMessage != previous?.errorMessage) {
         AppSnackbar.showError(context, next.errorMessage!);

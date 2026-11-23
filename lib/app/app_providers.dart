@@ -1,7 +1,7 @@
 import 'package:core_package/core_package.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../features/settings/data/demo_update_check_service.dart';
+import '../features/settings/services/demo_update_check_service.dart';
 
 /// The connectivity service used by [AppConnectivityBanner] at the app
 /// root. Kept here (rather than in `features/auth/`) since it's a

@@ -2,7 +2,7 @@ import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../auth/providers/auth_provider.dart';
 
 /// The home screen — the first screen shown after login, and the
 /// app's effective navigation root (back here exits the app rather
@@ -104,7 +104,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final config = AppThemeScope.of(context);
-    final authState = ref.watch(authControllerProvider);
+    final authState = ref.watch(authProvider);
     final visibleItems = _filteredItems.take(_visibleCount).toList();
 
     return AppExitGuard(

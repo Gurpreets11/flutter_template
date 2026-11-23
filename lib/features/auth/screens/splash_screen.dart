@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 /// The initial screen shown while the router's redirect logic
 /// determines whether a session exists. This screen itself doesn't
 /// navigate anywhere — see `app/router.dart`'s `redirect` callback,
-/// which watches `authControllerProvider` and routes to `/login` or
+/// which watches `authProvider` and routes to `/login` or
 /// `/home` once the status is known.
 class SplashScreen extends StatelessWidget {
   /// Creates a [SplashScreen].

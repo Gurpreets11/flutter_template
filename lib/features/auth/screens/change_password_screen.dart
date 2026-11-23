@@ -2,10 +2,10 @@ import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/auth_providers.dart';
+import '../providers/auth_provider.dart';
 
 /// The change-password screen — current/new/confirm password fields
-/// wired to [authControllerProvider.changePassword].
+/// wired to [authProvider.changePassword].
 class ChangePasswordScreen extends ConsumerStatefulWidget {
   /// Creates a [ChangePasswordScreen].
   const ChangePasswordScreen({super.key});
@@ -32,11 +32,10 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final success =
-        await ref.read(authControllerProvider.notifier).changePassword(
-              currentPassword: _currentPasswordController.text,
-              newPassword: _newPasswordController.text,
-            );
+    final success = await ref.read(authProvider.notifier).changePassword(
+          currentPassword: _currentPasswordController.text,
+          newPassword: _newPasswordController.text,
+        );
 
     if (success && mounted) {
       AppSnackbar.showSuccess(context, 'Password updated.');
@@ -47,9 +46,9 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final config = AppThemeScope.of(context);
-    final authState = ref.watch(authControllerProvider);
+    final authState = ref.watch(authProvider);
 
-    ref.listen(authControllerProvider, (previous, next) {
+    ref.listen(authProvider, (previous, next) {
       if (next.errorMessage != null &&
           next.errorMessage != previous?.errorMessage) {
         AppSnackbar.showError(context, next.errorMessage!);

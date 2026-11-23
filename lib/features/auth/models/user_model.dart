@@ -1,13 +1,12 @@
 import 'package:flutter/foundation.dart';
 
-/// The authenticated user, as understood by the domain/presentation
-/// layers. Deliberately minimal — real apps built from this template
+/// The authenticated user, used by the authentication feature. Deliberately minimal — real apps built from this template
 /// will extend this with whatever fields their backend actually
 /// returns (organization, role, avatar, etc.).
 @immutable
-class AuthUser {
-  /// Creates an [AuthUser].
-  const AuthUser({
+class UserModel {
+  /// Creates a [UserModel].
+  const UserModel({
     required this.id,
     required this.name,
     required this.email,
@@ -25,7 +24,7 @@ class AuthUser {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is AuthUser &&
+      (other is UserModel &&
           id == other.id &&
           name == other.name &&
           email == other.email);

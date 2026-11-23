@@ -1,8 +1,7 @@
 import 'package:core_package/core_package.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/theme_mode_controller.dart'
-    show appPreferencesServiceProvider;
+import 'theme_mode_controller.dart' show appPreferencesServiceProvider;
 
 /// A curated set of font scale options — deliberately a small enum
 /// rather than a free-form slider, so every app screen only ever needs

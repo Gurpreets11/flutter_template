@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../../domain/entities/auth_user.dart';
+import '../models/user_model.dart';
 
 /// The app's overall authentication status.
 enum AuthStatus {
@@ -32,7 +32,7 @@ class AuthState {
   final AuthStatus status;
 
   /// The signed-in user, if [status] is [AuthStatus.authenticated].
-  final AuthUser? user;
+  final UserModel? user;
 
   /// Whether an auth operation (login/logout/change password) is in
   /// flight — drives `AppButton.isLoading` on the relevant screens.
@@ -47,7 +47,7 @@ class AuthState {
   /// from "set to null").
   AuthState copyWith({
     AuthStatus? status,
-    AuthUser? user,
+    UserModel? user,
     bool? isLoading,
     String? errorMessage,
     bool clearError = false,
