@@ -1,76 +1,117 @@
-# flutter_starter
+# Flutter Template
 
-A GitHub template repo for bootstrapping new Flutter apps: splash → login →
-home → profile → change-password, fully wired to
-[`core_package`](https://github.com/your-org/core-package) (theming,
-networking, validators, common widgets, `Result`/`UseCase` base classes).
+A reusable Flutter starter application using a **simple Feature-First architecture**. It includes starter authentication, splash, home, profile, settings, theme preferences, and navigation, integrated with [`core_package`](https://github.com/Gurpreets11/core_package).
 
-## What's here
+## Technology stack
 
-- `lib/app/` — `main.dart`, `StarterApp` (theme + router wiring, plus
-  `UpdateRequiredGate`/`BiometricLockGate`/`AppIdleTimeoutGuard` — each
-  toggled via `featureFlagsProvider`), `router.dart` (GoRouter with
-  auth-driven redirects)
-- `lib/theme/starter_theme.dart` — **the one file you change to re-brand a
-  new app** — nothing else hardcodes a color
-- `lib/shell/app_shell.dart` — common app bar + navigation drawer wrapping
-  every authenticated screen
-- `lib/features/auth/` — full Clean Architecture slice (domain / data /
-  presentation) for login, logout, change password, and session persistence.
-  **`AuthRepositoryImpl` is a demo/mock** — it doesn't call a real backend
-  (any well-formed email + 8-character password "succeeds"). Swap in a real
-  implementation using `ApiClient` from `core_package` once your app has an
-  actual API; nothing in the domain or presentation layers needs to change.
-- `lib/features/home/`, `lib/features/profile/` — starter screens to replace
-  with your app's real dashboard/profile content
-- `lib/features/settings/` — the Settings screen (`/settings`): profile
-  link, change password, theme mode, font size, notifications toggle,
-  contact/about us, and log out. Reached via `AppCommonBar`'s overflow
-  menu or the navigation drawer — both point at the same actions.
-- `lib/constants/` — `AppConstants` (app name, support email, policy URLs)
-  and `ApiConstants` (base URL, timeouts, endpoint paths — placeholders
-  until real API integration)
-- `lib/features/settings/data/demo_update_check_service.dart` — **also a
-  demo/stub**, same pattern as `AuthRepositoryImpl`: always reports the
-  app is up to date. Replace once a real backend/remote-config source
-  exists.
+- Flutter / Dart
+- Riverpod for state management and dependency providers
+- GoRouter for navigation and authentication redirects
+- `core_package` for shared infrastructure, secure storage, networking utilities, common widgets, validators, theme contracts, and app services
 
-## Using this template for a new app
+## Architecture
 
-1. On GitHub: **"Use this template"** → create your new repo (e.g. `sales-crm-app`)
-2. Rename the package: `pubspec.yaml`'s `name:`, any
-   `import 'package:flutter_starter/...'` → your new package name,
-   `applicationId` (Android), bundle identifier (iOS), and the app's display
-   name
-3. In `pubspec.yaml`, pin `core_package`'s `ref:` to a specific tagged
-   version (not `main`)
-4. Replace `lib/theme/starter_theme.dart`'s colors with your app's real brand
-   palette
-5. Replace `AuthRepositoryImpl` with a real, API-backed implementation once
-   you have a backend
-6. Build your app's actual feature modules under `lib/features/`
+```text
+lib/
+├── main.dart
+├── app/
+│   ├── app.dart
+│   ├── app_providers.dart
+│   ├── router.dart
+│   ├── biometric_lock_gate.dart
+│   └── update_required_gate.dart
+├── core/
+│   └── constants/
+├── features/
+│   ├── auth/
+│   │   ├── models/
+│   │   ├── services/
+│   │   ├── providers/
+│   │   ├── screens/
+│   │   └── widgets/
+│   ├── home/
+│   │   └── screens/
+│   ├── profile/
+│   │   └── screens/
+│   └── settings/
+│       ├── services/
+│       ├── providers/
+│       └── screens/
+├── shared/
+│   └── app_shell.dart
+└── theme/
+    └── app_theme.dart
+```
 
-## Running it
+### Folder responsibilities
+
+| Folder | Responsibility |
+|---|---|
+| `app/` | App bootstrap, app-wide providers, routing, lifecycle gates |
+| `core/` | App-wide constants and infrastructure that is not specific to one feature |
+| `features/<name>/models/` | Data models owned by a feature |
+| `features/<name>/services/` | Feature operations and data access |
+| `features/<name>/providers/` | Riverpod state and dependency providers |
+| `features/<name>/screens/` | Route-level UI screens |
+| `features/<name>/widgets/` | Widgets used only by that feature |
+| `shared/` | Reusable UI shared by multiple features |
+| `theme/` | App theme configuration |
+
+### Typical feature flow
+
+```text
+Screen → Riverpod Provider/Controller → Feature Service → core_package / API / Storage
+```
+
+Keep the structure lightweight. Add a repository, use case, or additional abstraction only when a feature's complexity or testing needs justify it. Avoid putting feature-specific behavior in `core/`.
+
+## Included features
+
+- **Authentication:** demo login, logout, change password, and persisted demo session.
+- **Splash and routing:** GoRouter redirects based on authentication state.
+- **Home and profile:** starter screens to replace with application-specific content.
+- **Settings:** theme mode, font scale, notification preference, support/about information, and logout.
+- **App shell:** common navigation shell for authenticated screens.
+- **App gates:** optional biometric lock, idle timeout, connectivity banner, and force-update gate, controlled by feature flags where configured.
+- **Theme:** central theme configuration in `lib/theme/app_theme.dart`.
+
+## Important demo limitations
+
+- `AuthService` is a demo implementation. It accepts any email string with a password of at least eight characters and stores a demo token. It does not authenticate against a backend.
+- Change-password currently validates the new password length and returns demo success; it does not call a server.
+- The update-check service is a demo implementation and reports the app as up to date.
+- Notification settings store the user's preference; they do not register push notifications with FCM or another provider.
+
+Replace these demo services with real backend/provider integrations before production release.
+
+## Getting started
+
+1. Use this repository as a GitHub template or clone it.
+2. Change the package `name` in `pubspec.yaml` and update package imports if you rename it.
+3. Update Android application ID, iOS bundle identifier, and display name for your app.
+4. Keep `core_package` pinned to a tagged release rather than an unpinned branch.
+5. Customize `lib/theme/app_theme.dart` and `lib/core/constants/`.
+6. Add new application modules under `lib/features/<feature_name>/`.
+
+Run the app:
 
 ```bash
 flutter pub get
 flutter run
 ```
 
-The demo login accepts any well-formed email with a password of 8+
-characters — there's no real backend behind it yet.
+## Testing and quality checks
 
-## Testing
+Run:
 
 ```bash
+dart format lib test
+flutter analyze
 flutter test
 ```
 
-`AuthController` is covered with a mocked `AuthRepository` (login
-success/failure, logout, change-password success/failure).
-`AuthLocalDataSource` is covered with a fake in-memory
-`SecureStorageService` (no platform channel involved, since it depends on
-`core_package`'s storage abstraction rather than `flutter_secure_storage`
-directly). Full app-level widget tests (tapping through splash → login →
-home) aren't included yet — worth adding once this app has real screens
-built on top of the starter.
+Authentication tests cover controller state transitions and the demo service's session persistence/validation using an in-memory fake secure-storage implementation. Tests do not require a real secure-storage platform channel.
+
+## Versioning
+
+This architecture migration is released as **v2.0.0**. Keep the package version and Git tag aligned when creating the release.

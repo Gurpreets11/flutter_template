@@ -1,5 +1,27 @@
 # Changelog
 
+## 2.0.0 — Simple Feature-First architecture
+
+### Changed
+- Reorganized application code around feature modules.
+- Simplified authentication from Data/Domain/Presentation layers to Models, Services, Providers, Screens, and feature Widgets.
+- Moved app bootstrap and routing into `lib/app/`.
+- Moved reusable application UI into `lib/shared/`.
+- Moved application-wide constants into `lib/core/constants/`.
+- Renamed the starter theme file to `lib/theme/app_theme.dart`.
+- Updated authentication tests to test the service and controller without the old repository/use-case abstractions.
+
+### Preserved
+- Login, logout, and change-password demo flows.
+- Persisted demo session using `core_package` secure storage abstraction.
+- Splash screen and auth-driven GoRouter redirects.
+- Home, profile, settings, theme, font scale, notification preference, biometric lock, update gate, and app shell.
+- Existing dependency versions and `core_package` Git tag `v0.7.0`.
+
+### Notes
+- Authentication and update-check implementations remain demo implementations; connect real backend services before production use.
+- Run formatting, static analysis, tests, and platform builds before merging this release.
+
 ## 0.6.0
 
 - **New**: `featureFlagsProvider` (`lib/app/app_providers.dart`) — this app's `AppFeatureFlags` instance. Idle timeout and force-update check are on by default (to demo the wiring); biometric lock is off by default (needs biometrics enrolled on the test device to demo cleanly).

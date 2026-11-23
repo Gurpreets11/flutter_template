@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/auth/presentation/providers/auth_providers.dart';
+import '../features/auth/providers/auth_provider.dart';
 
 /// Wraps every authenticated screen with a consistent [AppCommonBar]
 /// (title, 3-dot overflow menu), [AppBottomNavBar] (primary Home/
@@ -33,7 +33,7 @@ class AppShell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authControllerProvider);
+    final authState = ref.watch(authProvider);
     final location = GoRouterState.of(context).matchedLocation;
     final currentTabIndex = _tabRoutes.indexOf(location).clamp(0, 1);
 
@@ -46,7 +46,7 @@ class AppShell extends ConsumerWidget {
         isDestructive: true,
       );
       if (confirmed) {
-        await ref.read(authControllerProvider.notifier).logout();
+        await ref.read(authProvider.notifier).logout();
       }
     }
 

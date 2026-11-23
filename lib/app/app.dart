@@ -2,11 +2,11 @@ import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../constants/app_constants.dart';
-import '../features/auth/presentation/providers/auth_providers.dart';
-import '../features/settings/presentation/providers/font_scale_controller.dart';
-import '../features/settings/presentation/providers/theme_mode_controller.dart';
-import '../theme/starter_theme.dart';
+import '../core/constants/app_constants.dart';
+import '../features/auth/providers/auth_provider.dart';
+import '../features/settings/providers/font_scale_controller.dart';
+import '../features/settings/providers/theme_mode_controller.dart';
+import '../theme/app_theme.dart';
 import 'app_providers.dart';
 import 'biometric_lock_gate.dart';
 import 'router.dart';
@@ -57,8 +57,7 @@ class StarterApp extends ConsumerWidget {
                 child: AppIdleTimeoutGuard(
                   enabled: featureFlags.enableIdleTimeout,
                   timeout: const Duration(minutes: 10),
-                  onTimeout: () =>
-                      ref.read(authControllerProvider.notifier).logout(),
+                  onTimeout: () => ref.read(authProvider.notifier).logout(),
                   child: child ?? const SizedBox.shrink(),
                 ),
               ),

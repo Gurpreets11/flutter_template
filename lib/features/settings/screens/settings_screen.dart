@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import '../../../../constants/app_constants.dart';
-import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../auth/providers/auth_provider.dart';
 import '../providers/font_scale_controller.dart';
 import '../providers/notification_settings_controller.dart';
 import '../providers/theme_mode_controller.dart';
@@ -23,7 +23,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final config = AppThemeScope.of(context);
-    final authState = ref.watch(authControllerProvider);
+    final authState = ref.watch(authProvider);
     final user = authState.user;
     final themeMode = ref.watch(themeModeControllerProvider);
     final fontScale = ref.watch(fontScaleControllerProvider);
@@ -208,7 +208,7 @@ class SettingsScreen extends ConsumerWidget {
                 isDestructive: true,
               );
               if (confirmed) {
-                await ref.read(authControllerProvider.notifier).logout();
+                await ref.read(authProvider.notifier).logout();
               }
             },
           ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../auth/providers/auth_provider.dart';
 
 /// The profile screen — shows the current user's details with actions
 /// to change their password or log out. New apps built from this
@@ -16,7 +16,7 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final config = AppThemeScope.of(context);
-    final authState = ref.watch(authControllerProvider);
+    final authState = ref.watch(authProvider);
     final user = authState.user;
 
     if (user == null) {
@@ -88,7 +88,7 @@ class ProfileScreen extends ConsumerWidget {
                 isDestructive: true,
               );
               if (confirmed) {
-                await ref.read(authControllerProvider.notifier).logout();
+                await ref.read(authProvider.notifier).logout();
               }
             },
           ),

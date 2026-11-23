@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/auth/presentation/providers/auth_providers.dart';
-import '../features/auth/presentation/providers/auth_state.dart';
-import '../features/auth/presentation/screens/change_password_screen.dart';
-import '../features/auth/presentation/screens/login_screen.dart';
-import '../features/auth/presentation/screens/splash_screen.dart';
-import '../features/home/presentation/screens/home_screen.dart';
-import '../features/profile/presentation/screens/profile_screen.dart';
-import '../features/settings/presentation/screens/settings_screen.dart';
-import '../shell/app_shell.dart';
+import '../features/auth/providers/auth_provider.dart';
+import '../features/auth/providers/auth_state.dart';
+import '../features/auth/screens/change_password_screen.dart';
+import '../features/auth/screens/login_screen.dart';
+import '../features/auth/screens/splash_screen.dart';
+import '../features/home/screens/home_screen.dart';
+import '../features/profile/screens/profile_screen.dart';
+import '../features/settings/screens/settings_screen.dart';
+import '../shared/app_shell.dart';
 
 /// Notifies [GoRouter] to re-run its `redirect` callback whenever auth
 /// state changes (login/logout/session check completing) — without
@@ -18,20 +18,21 @@ import '../shell/app_shell.dart';
 /// login succeeding wouldn't automatically move you off `/login`.
 class _RouterRefreshNotifier extends ChangeNotifier {
   _RouterRefreshNotifier(Ref ref) {
-    ref.listen(authControllerProvider, (_, __) => notifyListeners());
+    ref.listen(authProvider, (_, __) => notifyListeners());
   }
 }
 
-/// The app's router. Depends on [authControllerProvider] for its
+/// The app's router. Depends on [authProvider] for its
 /// redirect logic — see each `case` below for the routing rules.
 final routerProvider = Provider<GoRouter>((ref) {
   final refreshNotifier = _RouterRefreshNotifier(ref);
+  ref.onDispose(refreshNotifier.dispose);
 
   return GoRouter(
     initialLocation: '/splash',
     refreshListenable: refreshNotifier,
     redirect: (context, state) {
-      final authState = ref.read(authControllerProvider);
+      final authState = ref.read(authProvider);
       final location = state.matchedLocation;
       final isSplash = location == '/splash';
       final isLoggingIn = location == '/login';
